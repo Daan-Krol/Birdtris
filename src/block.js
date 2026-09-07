@@ -5,13 +5,13 @@ class block {
         this.x = x;
         this.y = y;
 
+        this.gravityDelay = 0;
+
         this.locked = false;
 
-        this.type = Math.random() < 0.66 ? "leaf" : "log";
+        this.type = block.randomType();
 
-        const color = this.type === "leaf"
-            ? 0x55aa55
-            : 0x8b5a2b;
+        const color = block.COLORS[this.type];
 
         this.sprite = scene.add.rectangle(
             0,
@@ -51,3 +51,33 @@ class block {
     }
 
 }
+
+
+block.BIRD_CUTOFF = 0.1;   // 0.1 - 0        = 10% bird
+block.FRUIT_CUTOFF = 0.35;  // 0.35 - 0.1     = 25% fruit
+block.LEAF_CUTOFF = 0.999; // 0.999 - 0.35   = 64.9% leaf
+
+block.COLORS = {
+    bird: 0xffffff,
+    fruit: 0xff5555,
+    leaf: 0x55aa55,
+    log: 0x8b5a2b
+};
+
+block.randomType = function () {
+    const random = Math.random();
+
+    if (random < block.BIRD_CUTOFF) {
+        return "bird";
+    }
+
+    if (random < block.FRUIT_CUTOFF) {
+        return "fruit";
+    }
+
+    if (random < block.LEAF_CUTOFF) {
+        return "leaf";
+    }
+
+    return "log";
+};
