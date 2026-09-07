@@ -12,13 +12,22 @@ const GRID_PIXEL_HEIGHT = GRID_HEIGHT * CELL_SIZE;
 const GRID_X = (GAME_WIDTH - GRID_PIXEL_WIDTH) / 2;
 const GRID_Y = (GAME_HEIGHT - GRID_PIXEL_HEIGHT) / 2;
 
-const TICK_RATE = 2;
-const TICK_DELAY = 1000 / TICK_RATE;
+
+let level = 1;
+let nextLevelTick = 100;
+let tickrate = 2;
+let tickdelay = 1000 / tickrate;
 
 
 class GameScene extends Phaser.Scene {
     constructor() {
         super("GameScene");
+    }
+
+    preload() {
+        this.load.image("bird", "assets/birdsprite.png");
+        this.load.image("apple", "assets/applesprite.png");
+        this.load.image("leaf", "assets/leafsprite.png");
     }
 
     create() {
@@ -55,8 +64,8 @@ class GameScene extends Phaser.Scene {
     }
 
     startGameTick() {
-        this.time.addEvent({
-            delay: TICK_DELAY,
+        this.gameTimer = this.time.addEvent({
+            delay: tickdelay,
             callback: this.gameTick,
             callbackScope: this,
             loop: true
@@ -76,6 +85,16 @@ class GameScene extends Phaser.Scene {
         this.gravityStep();
 
         this.moveBlockDown();
+        if (this.tickCount >= nextLevelTick) {
+            level++;
+
+            tickrate++;
+
+            tickdelay = 1000 / tickrate;
+            this.gameTimer.delay = tickdelay;
+
+            nextLevelTick += 100 + (level - 1) * 50;
+        }
     }
 
     drawGrid() {

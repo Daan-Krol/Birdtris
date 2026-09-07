@@ -13,13 +13,36 @@ class block {
 
         const color = block.COLORS[this.type];
 
-        this.sprite = scene.add.rectangle(
-            0,
-            0,
-            CELL_SIZE,
-            CELL_SIZE,
-            color
-        );
+        if (this.type === "bird") {
+            this.sprite = scene.add.sprite(
+                0,
+                0,
+                "bird"
+            );
+            this.sprite.setDisplaySize(CELL_SIZE, CELL_SIZE);
+        } else if (this.type === "fruit") {
+            this.sprite = scene.add.sprite(
+                0,
+                0,
+                "apple"
+            );
+            this.sprite.setDisplaySize(CELL_SIZE, CELL_SIZE);
+        } else if (this.type === "leaf") {
+            this.sprite = scene.add.sprite(
+                0,
+                0,
+                "leaf"
+            );
+            this.sprite.setDisplaySize(CELL_SIZE, CELL_SIZE);
+        } else {
+            this.sprite = scene.add.rectangle(
+                0,
+                0,
+                CELL_SIZE,
+                CELL_SIZE,
+                color
+            );
+        }
 
         this.updatePosition();
     }

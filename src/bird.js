@@ -10,13 +10,8 @@ class bird {
         this.fruitEaten = 0;
         this.ticksSinceProgress = 0;
 
-        this.sprite = scene.add.rectangle(
-            0,
-            0,
-            CELL_SIZE,
-            CELL_SIZE,
-            0xffffff
-        );
+        this.sprite = scene.add.image(0, 0, "bird");
+        this.sprite.setDisplaySize(CELL_SIZE, CELL_SIZE);
 
         this.updatePosition();
     }
@@ -31,6 +26,11 @@ class bird {
             GRID_Y +
             this.y * CELL_SIZE +
             CELL_SIZE / 2;
+    }
+
+    flipDirection() {
+        this.direction *= -1;
+        this.sprite.setFlipX(this.direction === -1);
     }
 
     move() {
@@ -81,7 +81,7 @@ class bird {
 
         // Wall → turn around
         if (nextX < 0 || nextX >= GRID_WIDTH) {
-            this.direction *= -1;
+            this.flipDirection()
 
             return;
         }
@@ -106,7 +106,7 @@ class bird {
             }
 
             // Normal block → turn around
-            this.direction *= -1;
+            this.flipDirection();
 
             const otherX = this.x + this.direction;
 
