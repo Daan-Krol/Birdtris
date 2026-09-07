@@ -70,7 +70,7 @@ class block {
 
     lock() {
         this.locked = true;
-        this.sprite.setAlpha(0.8);
+        //this.sprite.setAlpha(0.8);
     }
 
     eat() {
@@ -110,7 +110,7 @@ class block {
 
 block.BIRD_CUTOFF = 0.1;   // 0.1 - 0        = 10% bird
 block.FRUIT_CUTOFF = 0.35;  // 0.35 - 0.1     = 25% fruit
-block.LEAF_CUTOFF = 0.999; // 0.999 - 0.35   = 64.9% leaf
+block.LEAF_CUTOFF = 0.99999999999999999; // 0.999 - 0.35   = 64.9% leaf
 
 block.COLORS = {
     bird: 0xffffff,

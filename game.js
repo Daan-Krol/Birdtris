@@ -28,10 +28,31 @@ class GameScene extends Phaser.Scene {
         this.load.image("bird", "assets/birdsprite.png");
         this.load.image("apple", "assets/applesprite.png");
         this.load.image("leaf", "assets/leafsprite.png");
+        this.load.image("controls", "assets/controlssprite.png");
+        this.load.image("gridbackground", "assets/gridbackground.png");
+        this.load.image("background", "assets/background.png");
     }
 
     create() {
         this.score = 0;
+        this.add.image(
+            GAME_WIDTH / 2,
+            GAME_HEIGHT / 2,
+            "background"
+        );
+
+        this.add.image(
+            GAME_WIDTH / 2,
+            GAME_HEIGHT / 2,
+            "gridbackground"
+        );
+        this.controlsImage = this.add.image(
+            GRID_X / 2,
+            GAME_HEIGHT / 2,
+            "controls"
+        );
+
+        this.controlsImage.setDisplaySize(144, 200);
 
         this.scoreText = this.add.text(20, 50, "Score: 0", {
             fontSize: "24px",
@@ -59,7 +80,7 @@ class GameScene extends Phaser.Scene {
             color: "#ffffff"
         });
         
-        this.drawGrid();
+        // this.drawGrid();
         this.startGameTick();
     }
 
@@ -91,37 +112,37 @@ class GameScene extends Phaser.Scene {
             tickdelay = 1000 / tickrate;
             this.gameTimer.delay = tickdelay;
 
-            nextLevelTick += 100 + (level - 1) * 50;
+            nextLevelTick += 100 + (level - 1) * 100;
         }
     }
 
-    drawGrid() {
-        const graphics = this.add.graphics();
+    // drawGrid() {
+    //     const graphics = this.add.graphics();
 
-        graphics.lineStyle(1, 0x555555, 1);
+    //     graphics.lineStyle(1, 0x555555, 1);
 
-        for (let x = 0; x <= GRID_WIDTH; x++) {
-            const xPosition = GRID_X + x * CELL_SIZE;
+    //     for (let x = 0; x <= GRID_WIDTH; x++) {
+    //         const xPosition = GRID_X + x * CELL_SIZE;
 
-            graphics.lineBetween(
-                xPosition,
-                GRID_Y,
-                xPosition,
-                GRID_Y + GRID_PIXEL_HEIGHT
-            );
-        }
+    //         graphics.lineBetween(
+    //             xPosition,
+    //             GRID_Y,
+    //             xPosition,
+    //             GRID_Y + GRID_PIXEL_HEIGHT
+    //         );
+    //     }
 
-        for (let y = 0; y <= GRID_HEIGHT; y++) {
-            const yPosition = GRID_Y + y * CELL_SIZE;
+    //     for (let y = 0; y <= GRID_HEIGHT; y++) {
+    //         const yPosition = GRID_Y + y * CELL_SIZE;
 
-            graphics.lineBetween(
-                GRID_X,
-                yPosition,
-                GRID_X + GRID_PIXEL_WIDTH,
-                yPosition
-            );
-        }
-    }
+    //         graphics.lineBetween(
+    //             GRID_X,
+    //             yPosition,
+    //             GRID_X + GRID_PIXEL_WIDTH,
+    //             yPosition
+    //         );
+    //     }
+    // }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.cursors.left)) {
@@ -406,7 +427,7 @@ const config = {
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
 
-    backgroundColor: "#111111",
+    backgroundColor: "#145e3a",
 
     scene: GameScene
 };
