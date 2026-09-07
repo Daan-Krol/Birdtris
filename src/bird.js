@@ -56,7 +56,7 @@ class bird {
 
             // Fruit underneath → eat it
             if (belowBlock !== null && belowBlock.type === "fruit") {
-                belowBlock.destroy();
+                belowBlock.eat();
                 this.scene.board[this.y + 1][this.x] = null;
 
                 this.fruitEaten++;
@@ -91,7 +91,7 @@ class bird {
 
         if (nextBlock !== null) {
             if (nextBlock.type === "fruit") {
-                nextBlock.destroy();
+                nextBlock.eat();
                 this.scene.board[this.y][nextX] = null;
                 this.scene.delayGravityAbove(nextX, this.y);
 
@@ -119,7 +119,7 @@ class bird {
 
             if (otherBlock !== null) {
                 if (otherBlock.type === "fruit") {
-                    otherBlock.destroy();
+                    otherBlock.eat();
                     this.scene.board[this.y][otherX] = null;
                     this.scene.delayGravityAbove(otherX, this.y);
 
@@ -159,13 +159,19 @@ class bird {
     }
 
     destroy() {
-        this.sprite.destroy();
-
-        const index = this.scene.birds.indexOf(this);
-
-        if (index !== -1) {
-            this.scene.birds.splice(index, 1);
-        }
+        this.scene.tweens.add({
+            targets: this.sprite,
+            scale: 1.5,
+            duration: 250,
+            yoyo: true,
+            onComplete: () => {
+                this.sprite.destroy();
+                const index = this.scene.birds.indexOf(this);
+                if (index !== -1) {
+                    this.scene.birds.splice(index, 1);
+                }
+            }
+        });
     }
 
 }

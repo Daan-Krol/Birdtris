@@ -33,6 +33,10 @@ class block {
                 0,
                 "leaf"
             );
+            const random = Math.random();
+            if (random < 0.5) {
+                this.sprite.setFlipX(-1);
+            }
             this.sprite.setDisplaySize(CELL_SIZE, CELL_SIZE);
         } else {
             this.sprite = scene.add.rectangle(
@@ -67,6 +71,34 @@ class block {
     lock() {
         this.locked = true;
         this.sprite.setAlpha(0.8);
+    }
+
+    eat() {
+        this.scene.tweens.add({
+            targets: this.sprite,
+            scale: 1.5,
+            duration: 200,
+            yoyo: true,
+            onComplete: () => {
+                this.destroy();
+            }
+        });
+    }
+
+    lineDestroy() {
+        this.scene.tweens.add({
+            targets: this.sprite,
+            x: this.sprite.x + Phaser.Math.Between(-8, 8),
+            y: this.sprite.y + Phaser.Math.Between(10, 25),
+            angle: Phaser.Math.Between(-15, 15),
+            alpha: 0,
+            duration: 1500,
+            delay: Phaser.Math.Between(0, 250),
+            ease: "Power2",
+            onComplete: () => {
+                this.destroy();
+            }
+        });
     }
 
     destroy() {

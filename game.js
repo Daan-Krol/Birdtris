@@ -54,7 +54,7 @@ class GameScene extends Phaser.Scene {
 
         this.tickCount = 0;
 
-        this.tickText = this.add.text(20, 20, "Tick: 0", {
+        this.levelText = this.add.text(20, 20, "Level: 1", {
             fontSize: "24px",
             color: "#ffffff"
         });
@@ -74,8 +74,6 @@ class GameScene extends Phaser.Scene {
 
     gameTick() {
         this.tickCount++;
-        this.tickText.setText("Tick: " + this.tickCount);
-
         // Copy the array before iterating: a bird's move() can call
         // destroy(), which removes it from this.birds mid-loop.
         for (const activeBird of [...this.birds]) {
@@ -87,7 +85,7 @@ class GameScene extends Phaser.Scene {
         this.moveBlockDown();
         if (this.tickCount >= nextLevelTick) {
             level++;
-
+            this.levelText.setText("Level: " + level);
             tickrate++;
 
             tickdelay = 1000 / tickrate;
@@ -148,7 +146,7 @@ class GameScene extends Phaser.Scene {
         const spawnX = 3;
         const spawnY = 0;
 
-        if (this.board[spawnY][spawnX] !== null) {
+        if (this.board[spawnY][spawnX] !== null || this.board[spawnY][spawnX + 1] !== null || this.board[spawnY + 1][spawnX] !== null || this.board[spawnY + 1][spawnX + 1] !== null) {
             console.log("GAME OVER");
             this.scene.restart();
             return;
@@ -298,7 +296,7 @@ class GameScene extends Phaser.Scene {
 
     clearLine(y) {
         for (let x = 0; x < GRID_WIDTH; x++) {
-            this.board[y][x].destroy();
+            this.board[y][x].lineDestroy();
             this.board[y][x] = null;
         }
 
