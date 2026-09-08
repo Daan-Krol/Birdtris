@@ -15,7 +15,7 @@ const GRID_Y = (GAME_HEIGHT - GRID_PIXEL_HEIGHT) / 2;
 
 let level = 1;
 let nextLevelTick = 100;
-let tickrate = 2;
+let tickrate = 1;
 let tickdelay = 1000 / tickrate;
 
 
@@ -46,6 +46,43 @@ class GameScene extends Phaser.Scene {
             GAME_HEIGHT / 2,
             "gridbackground"
         );
+
+
+        // Outline around grid background
+        const gridOutline = this.add.graphics();
+
+        gridOutline.lineStyle(6, 0xA66B40, 1);
+
+        gridOutline.strokeRect(
+            GRID_X - 3,
+            GRID_Y - 3,
+            GRID_PIXEL_WIDTH + 6,
+            GRID_PIXEL_HEIGHT + 6
+        );
+
+
+        const gridOutline2 = this.add.graphics();
+
+        gridOutline2.lineStyle(6, 0x70482F, 1);
+
+        gridOutline2.strokeRect(
+            GRID_X - 9,
+            GRID_Y - 9,
+            GRID_PIXEL_WIDTH + 18,
+            GRID_PIXEL_HEIGHT + 18
+        );
+
+        const screenOutline = this.add.graphics();
+
+        screenOutline.lineStyle(6, 0x70482F, 1);
+
+        screenOutline.strokeRect(
+            3,
+            3,
+            GAME_WIDTH - 6,
+            GAME_HEIGHT - 6
+        );
+
         this.controlsImage = this.add.image(
             GRID_X / 2,
             GAME_HEIGHT / 2,
@@ -55,9 +92,12 @@ class GameScene extends Phaser.Scene {
         this.controlsImage.setDisplaySize(144, 200);
 
         this.scoreText = this.add.text(20, 50, "Score: 0", {
-            fontSize: "24px",
+            fontFamily: "Fredoka",
+            fontSize: "32px",
             color: "#ffffff"
         });
+
+        this.scorePopups = [];
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.board = [];
@@ -76,7 +116,8 @@ class GameScene extends Phaser.Scene {
         this.tickCount = 0;
 
         this.levelText = this.add.text(20, 20, "Level: 1", {
-            fontSize: "24px",
+            fontFamily: "Fredoka",
+            fontSize: "32px",
             color: "#ffffff"
         });
         
@@ -281,8 +322,9 @@ class GameScene extends Phaser.Scene {
         this.settleGravity();
 
         linesCleared += this.checkLines();
-
-        this.score += this.calculateScore(linesCleared);
+        if (linesCleared > 0) {
+            this.addScore(this.calculateScore(linesCleared));
+        }
 
         this.scoreText.setText("Score: " + this.score);
 
@@ -417,6 +459,41 @@ class GameScene extends Phaser.Scene {
 
         return SCORE_BY_LINES[lines] || 0;
     }
+
+    addScore(points) {
+        this.score += points;
+        this.scoreText.setText("Score: " + this.score);
+
+        // Move existing score popups down
+        for (const popup of this.scorePopups) {
+            popup.y += 25;
+        }
+
+        // Create new popup
+        const popup = this.add.text(20, 80, "+" + points, {
+            fontFamily: "Fredoka",
+            fontSize: "24px",
+            color: "#ffffff"
+        });
+
+        this.scorePopups.unshift(popup);
+
+        // Fade out after 1 second
+        this.tweens.add({
+            targets: popup,
+            alpha: 0,
+            y: popup.y + 20,
+            duration: 2500,
+            onComplete: () => {
+                popup.destroy();
+
+                const index = this.scorePopups.indexOf(popup);
+                if (index !== -1) {
+                    this.scorePopups.splice(index, 1);
+                }
+            }
+        });
+    }    
 
 }
 

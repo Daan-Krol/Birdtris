@@ -60,7 +60,7 @@ class bird {
                 this.scene.board[this.y + 1][this.x] = null;
 
                 this.fruitEaten++;
-                this.scene.score += 200;
+                this.scene.addScore(200);
                 this.scene.scoreText.setText("Score: " + this.scene.score);
 
                 this.y++;
@@ -97,7 +97,7 @@ class bird {
 
                 this.fruitEaten++;
                 this.ticksSinceProgress = 0;
-                this.scene.score += 200;
+                this.scene.addScore(200);
                 this.scene.scoreText.setText("Score: " + this.scene.score);
 
                 this.x = nextX;
@@ -125,7 +125,7 @@ class bird {
 
                     this.fruitEaten++;
                     this.ticksSinceProgress = 0;
-                    this.scene.score += 200;
+                    this.scene.addScore(200);
                     this.scene.scoreText.setText("Score: " + this.scene.score);
 
                     this.x = otherX;
